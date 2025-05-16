@@ -20,7 +20,7 @@ mkdir -p temp/QC result/QC
 
 
     time tail -n+2 result/mydata.txt|cut -f1|rush -j 4 \
-      "fastp -i Seq/{}_1.fq.gz -I Seq/{}_2.fq.gz \   
+      "fastp -i Seq/{}_1.fq.gz -I Seq/{}_2.fq.gz \
         -j temp/QC/{}_fastp.json -h temp/QC/{}_fastp.html \
         -o temp/QC/{}_1.fastq  -O temp/QC/{}_2.fastq \
         > temp/QC/{}.log 2>&1"
