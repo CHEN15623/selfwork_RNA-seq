@@ -12,7 +12,7 @@ mkdir -p /osmgfs10000/home/wub/RNA-seq/
 mkdir -p /osmgfs10000/home/wub/RNA-seq/temp Seq result
 mkdir -p /osmgfs10000/home/wub/db/
 # seq目录存放下机双端数据  temp目录临时文件存放 result结果文件存放
-# 编辑mydata.txt文件，存放于result目录，mydatat格式在实例数据中
+# 编辑mydata.txt文件，存放于result目录，mydata格式在实例数据中
 wd= /osmgfs10000/home/wub/RNA-seq/
 db= /osmgfs10000/home/wub/db/
 # fastp安装
@@ -37,7 +37,7 @@ conda activate fastp
         > temp/QC/{}.log 2>&1"
 
 # mydata.txt是所有样品信息的汇总 -j 是并行处理的样本数，根据目前服务器资源设置
-#  {1}_1.fq.gz是输入需要质控的文件，{1}是mydata中第一列的样本名称，_1.fq.gz是样本序列文件的其他部分，不同公司这一部分有区别，根据实际情况选择
+#  {}_1.fq.gz是输入需要质控的文件，{}是mydata中第一列的样本名称，_1.fq.gz是样本序列文件的其他部分，不同公司这一部分有区别，根据实际情况选择
     
 	# 质控后结果汇总
     echo -e "SampleID\tRaw\tClean" > temp/fastp
