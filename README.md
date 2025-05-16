@@ -30,11 +30,11 @@ fastp -v
 cd ${wd}
 mkdir -p temp/QC result/QC
 conda activate fastp
-    time tail -n+2 result/mydata.txt|cut -f1|rush -j 4 \  
-      "fastp -i Seq/{1}_1.fq.gz -I Seq/{1}_2.fq.gz \   
-        -j temp/QC/{1}_fastp.json -h temp/QC/{1}_fastp.html \
-        -o temp/QC/{1}_1.fastq  -O temp/QC/{1}_2.fastq \
-        > temp/QC/{1}.log 2>&1"
+    time tail -n+2 result/mydata.txt|cut -f1|rush -j 4 \
+      "fastp -i Seq/{}_1.fq.gz -I Seq/{}_2.fq.gz \
+        -j temp/QC/{}_fastp.json -h temp/QC/{}_fastp.html \
+        -o temp/QC/{}_1.fastq  -O temp/QC/{}_2.fastq \
+        > temp/QC/{}.log 2>&1"
 
 # mydata.txt是所有样品信息的汇总 -j 是并行处理的样本数，根据目前服务器资源设置
 #  {1}_1.fq.gz是输入需要质控的文件，{1}是mydata中第一列的样本名称，_1.fq.gz是样本序列文件的其他部分，不同公司这一部分有区别，根据实际情况选择
