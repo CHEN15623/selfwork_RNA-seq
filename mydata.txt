@@ -1,0 +1,11 @@
+SampleID	Group	Replicate
+BC1	BC	1
+BC2	BC	2
+BC3	BC	3
+BC4	BC	4
+BC5	BC	5
+PA1	PA	1
+PA2	PA	2
+PA3	PA	3
+PA4	PA	4
+PA5	PA	5

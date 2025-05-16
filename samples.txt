@@ -1,0 +1,11 @@
+sample	condition
+BC1	BC
+BC2	BC
+BC3	BC
+BC4	BC
+BC5	BC
+PA1	PA
+PA2	PA
+PA3	PA
+PA4	PA
+PA5	PA
