@@ -54,8 +54,48 @@ dotplot(ego_down, showCategory = 10, title = "GO Downregulated")
 # KEGG dotplot
 dotplot(ekegg_up, showCategory = 10, title = "KEGG Upregulated")
 dotplot(ekegg_down, showCategory = 10, title = "KEGG Downregulated")
-结果导出
-write.csv(as.data.frame(ego_up), "GO_Up.csv")
-write.csv(as.data.frame(ego_down), "GO_Down.csv")
-write.csv(as.data.frame(ekegg_up), "KEGG_Up.csv")
-write.csv(as.data.frame(ekegg_down), "KEGG_Down.csv")
+# 结果导出
+# 函数：将 geneID 转换为 geneSymbol 并加入新列
+add_gene_symbols <- function(df) {
+  entrez_all <- df$geneID %>%
+    str_split("/") %>%
+    unlist() %>%
+    unique()
+  
+  # ENTREZID -> SYMBOL 注释
+  mapping <- bitr(entrez_all,
+                  fromType = "ENTREZID",
+                  toType = "SYMBOL",
+                  OrgDb = org.Mm.eg.db)
+  
+  convert_geneid_to_symbol <- function(geneid_string) {
+    ids <- str_split(geneid_string, "/")[[1]]
+    symbols <- mapping %>%
+      filter(ENTREZID %in% ids) %>%
+      arrange(match(ENTREZID, ids)) %>%
+      pull(SYMBOL)
+    paste(symbols, collapse = "/")
+  }
+  
+  df$geneSymbol <- sapply(df$geneID, convert_geneid_to_symbol)
+  return(df)
+}
+
+# 将结果转换为 data.frame
+go_up_df <- as.data.frame(ego_up)
+go_down_df <- as.data.frame(ego_down)
+kegg_up_df <- as.data.frame(ekegg_up)
+kegg_down_df <- as.data.frame(ekegg_down)
+
+# 添加 geneSymbol 列
+go_up_df <- add_gene_symbols(go_up_df)
+go_down_df <- add_gene_symbols(go_down_df)
+kegg_up_df <- add_gene_symbols(kegg_up_df)
+kegg_down_df <- add_gene_symbols(kegg_down_df)
+
+# 保存为 CSV
+write.csv(go_up_df, "GO_Up.csv", row.names = FALSE)
+write.csv(go_down_df, "GO_Down.csv", row.names = FALSE)
+write.csv(kegg_up_df, "KEGG_Up.csv", row.names = FALSE)
+write.csv(kegg_down_df, "KEGG_Down.csv", row.names = FALSE)
+
