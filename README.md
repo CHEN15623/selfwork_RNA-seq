@@ -1,25 +1,25 @@
 
 # 转录组数据分析流程
-# -----1、下机数据质控，使用FASTQC或fastp，fastp融合了低质量过滤，去接头，裁切，功能强大便捷
-# -----2、宿主基因组比较，使用HISAT2或STAR
-# -----3、基因定量，使用RSEM或featureCounts或HTSeq-count
+1. 下机数据质控，使用FASTQC或fastp，fastp融合了低质量过滤，去接头，裁切，功能强大便捷
+2. 宿主基因组比较，使用HISAT2或STAR
+3. 基因定量，使用RSEM或featureCounts或HTSeq-count
 
 
 
-# 环境搭建,此分析流程在conda 24.11.2版本进行
-# 创建工作目录
-mkdir -p /osmgfs10000/home/wub/RNA-seq/ 
-mkdir -p /osmgfs10000/home/wub/RNA-seq/temp Seq result
-mkdir -p /osmgfs10000/home/wub/db/
+## 环境搭建,此分析流程在conda 24.11.2版本进行
+### 创建工作目录
+mkdir -p /osmgfs10000/home/wub/RNA-seq/    
+mkdir -p /osmgfs10000/home/wub/RNA-seq/temp Seq result    
+mkdir -p /osmgfs10000/home/wub/db/     
 # seq目录存放下机双端数据  temp目录临时文件存放 result结果文件存放
 # 编辑mydata.txt文件，存放于result目录，mydata格式在实例数据中
-wd= /osmgfs10000/home/wub/RNA-seq/
-db= /osmgfs10000/home/wub/db/
+wd= /osmgfs10000/home/wub/RNA-seq/    
+db= /osmgfs10000/home/wub/db/     
 # fastp安装
-conda create -n fastp
-conda activate fastp
-conda install -c bioconda fastp
-fastp -v
+conda create -n fastp     
+conda activate fastp     
+conda install -c bioconda fastp     
+fastp -v     
 # 本流程版本fastp 0.23.4
 
 # 安装rush进行数据并行处理
@@ -27,14 +27,14 @@ fastp -v
 # rush v0.5.4
 
 # 1、数据质控
-cd ${wd}
-mkdir -p temp/QC result/QC
-conda activate fastp
-    time tail -n+2 result/mydata.txt|cut -f1|rush -j 4 \
-      "fastp -i Seq/{}_1.fq.gz -I Seq/{}_2.fq.gz \
-        -j temp/QC/{}_fastp.json -h temp/QC/{}_fastp.html \
-        -o temp/QC/{}_1.fastq  -O temp/QC/{}_2.fastq \
-        > temp/QC/{}.log 2>&1"
+cd ${wd}     
+mkdir -p temp/QC result/QC     
+conda activate fastp     
+    time tail -n+2 result/mydata.txt|cut -f1|rush -j 4 \     
+      "fastp -i Seq/{}_1.fq.gz -I Seq/{}_2.fq.gz \     
+        -j temp/QC/{}_fastp.json -h temp/QC/{}_fastp.html \     
+        -o temp/QC/{}_1.fastq  -O temp/QC/{}_2.fastq \     
+        > temp/QC/{}.log 2>&1"     
 
 # mydata.txt是所有样品信息的汇总 -j 是并行处理的样本数，根据目前服务器资源设置
 #  {}_1.fq.gz是输入需要质控的文件，{}是mydata中第一列的样本名称，_1.fq.gz是样本序列文件的其他部分，不同公司这一部分有区别，根据实际情况选择
